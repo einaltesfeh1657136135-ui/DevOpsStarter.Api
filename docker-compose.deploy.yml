@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  api:
+    image: ghcr.io/einaltesfeh1657136135-ui/devopsstarter-api@sha256:ec8805000de0d137399928abdfb9180fa789b871d714a7619d3e5326d25db314
+    container_name: devopsstarter-api
+    ports:
+      - "8080:8080"
+    environment:
+      App__Environment: Production
+    restart: unless-stopped
