@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -25,5 +29,17 @@ jobs:
     - name: Build
       run: dotnet build --no-restore -c Release
 
-    - name: Docker build
-      run: docker build -t devopsstarter-api .
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/devopsstarter-api:latest
